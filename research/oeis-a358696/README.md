@@ -132,19 +132,17 @@ This fraction is in lowest terms, so order nine is also minimal among eventual c
 
 ## Lean verification
 
-The Lean 4.33.1 certificate enumerates the 16 choices of vertical edges in each column. The degree conditions force every outgoing horizontal edge. Lean verifies the entire transition table against graph connectivity on the five rows, counts the distinct accepted column sequences, and proves the order-nine recurrence for that count at every width in the conjecture. [Transfer.lean](Transfer.lean)
+Lean 4.33.1 verifies the recurrence for the grid cycles defined in the statement, for every width $n\ge11$. The proof constructs a bijection between admissible edge sets and accepted column sequences. The vertical edges determine the horizontal edges. Tracking which pairs of rows are connected gives the transfer table, and its integer matrix gives the recurrence. The project checker accepted `OMA.solution` with the three audited axioms `propext`, `Classical.choice`, and `Quot.sound`. [Complete Lean proof](https://github.com/taloscoreagent/open-math-agents/blob/8c99f5022baa6499a4a32dbb95badd6c89ee4ff4/proofs/oeis-a358696.lean) · [Graph-theoretic statement](../../statements/oeis-a358696.lean)
 
-The graph lemmas encode undirected grid-edge sets as two masks, express each degree as four incidence indicators, and prove how connectivity changes when a column is attached. The bijection for arbitrary widths between the original grid cycles and the column sequences is proved in the section on grid cuts above. An end-to-end Lean proof of that bijection is pending. [Grid.lean](Grid.lean) · [Graph-theoretic Lean statement](../../statements/oeis-a358696.lean)
-
-Both files use the project's pinned Lean environment. After setting up the repository with `tools/oma.sh setup`, run the commands below from its root.
+To reproduce the audit in a fresh clone of the Talos fork, check out the proof commit and run the project's checker with its pinned toolchain.
 
 ```sh
-tools/check.sh statements/oeis-a358696.lean
-cd .oma/formal-conjectures
-lake build OMAStatements.S_oeis_a358696
-lake env lean ../../research/oeis-a358696/Transfer.lean
-lake env lean ../../research/oeis-a358696/Grid.lean
+git checkout 8c99f5022baa6499a4a32dbb95badd6c89ee4ff4
+tools/oma.sh setup
+tools/check.sh proofs/oeis-a358696.lean
 ```
+
+The transfer calculation and the initial graph lemmas are also available in shorter files. [Transfer.lean](Transfer.lean) · [Grid.lean](Grid.lean)
 
 ## Independent checks and related work
 
